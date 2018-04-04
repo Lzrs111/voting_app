@@ -49,4 +49,15 @@ function deletePoll(id) {
         })
 }
 
-module.exports ={getPolls,newPoll,deletePoll}
+function updatePoll(data) {
+    data = JSON.parse(data)
+    return new Promise((resolve,reject)=>{
+        Model.findOneAndUpdate({_id:data[0],"options._id":data['2']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
+            if (error) throw error
+            resolve()
+            })
+        })
+    
+}
+
+module.exports ={getPolls,newPoll,deletePoll,updatePoll}

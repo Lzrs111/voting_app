@@ -1,5 +1,5 @@
 import express from 'express' 
-import {getPolls,newPoll,deletePoll} from './crud.js' 
+import {getPolls,newPoll,deletePoll,updatePoll} from './crud.js' 
 
 var ap = express()
 
@@ -42,6 +42,20 @@ ap.delete('/del',(req,res)=>{
             }).then((data)=>{
                res.send(data) 
             }).catch((error)=>{
+                if (error) throw error
+            })
+        })
+    })
+
+ap.post('/update',(req,res)=>{
+    req.on('data',(data)=>{
+        updatePoll(data).then((data)=>{
+            return getPolls()
+            })
+            .then((data)=>{
+                res.json(data)
+            })
+            .catch((error)=>{
                 if (error) throw error
             })
         })

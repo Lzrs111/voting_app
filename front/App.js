@@ -16,6 +16,7 @@ export default class App extends React.Component {
     this.newPoll = this.newPoll.bind(this);
     this.addSwitch = this.addSwitch.bind(this)
     this.deletePoll = this.deletePoll.bind(this);
+    this.updatePoll = this.updatePoll.bind(this)
     }
     componentDidMount() {
         this.getPolls()
@@ -51,11 +52,24 @@ export default class App extends React.Component {
         var req = new Request("del",{method:"DELETE",body:id})
         fetch(req).then(res=>{
             return res.json()
-        }).then((data)=>{
+        })
+        .then((data)=>{
             this.setState({
                 polls:data
             })
+        })
+    }
+    updatePoll(array) {
+        var temporary = Object.assign({},array)
+        var req = new Request("update",{method:"POST",body:JSON.stringify(temporary)})
+        fetch(req).then(res=>{
+            return res.json()
+        })
+        .then((data)=>{
+            this.setState({
+                polls:data
             })
+        })
     }
     addSwitch() {
         this.setState({
@@ -65,7 +79,7 @@ export default class App extends React.Component {
     renderPolls() {
        return this.state.polls.map((value,index)=>{
             return (
-                <Poll delete={this.deletePoll} question={value.question} votes={value.totalVotes} options={value.options} _id={ value._id} key={index} />
+                <Poll update={this.updatePoll} delete={this.deletePoll} question={value.question} votes={value.totalVotes} options={value.options} _id={ value._id} key={index} />
             )
             })
     }
