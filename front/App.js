@@ -1,7 +1,7 @@
 import React from "react"
 import Poll from './poll.js' 
 import InputForm from './input.js' 
-
+import './styles.css'
 
 export default class App extends React.Component {
     constructor() {
@@ -48,7 +48,6 @@ export default class App extends React.Component {
         })
     }
     deletePoll(id) {
-        console.log(id)
         var req = new Request("del",{method:"DELETE",body:id})
         fetch(req).then(res=>{
             return res.json()
@@ -76,6 +75,16 @@ export default class App extends React.Component {
             adding:!this.state.adding
         })
     }
+    // //  only update if  a new poll is added
+    // shouldComponentUpdate (nextProps, nextState) {
+    //     if (this.state.adding ||nextState.adding){
+    //         return true
+    //     }else if (nextState.polls.length  ==this.state.polls.length){
+    //         return false
+    //     }
+    // return true
+    // }
+    
     renderPolls() {
        return this.state.polls.map((value,index)=>{
             return (
@@ -85,7 +94,7 @@ export default class App extends React.Component {
     }
     render() {
         return(
-            <div>
+            <div style={{width:"100vw",height:'100vh'}} >
                 {this.renderPolls()}
                 {this.state.adding ? <InputForm add={this.newPoll} />: null}
                 <button  onClick={this.addSwitch} >

@@ -3,7 +3,7 @@ import {getPolls,newPoll,deletePoll,updatePoll} from './crud.js'
 
 var ap = express()
 
-ap.use('/',express.static(__dirname,{index:'index.html'})).listen(3000,()=>{
+ap.use('/',express.static(__dirname,{index:'index.html'})).listen(process.env.PORT || 3000,()=>{
     console.log('server started')
     })
 

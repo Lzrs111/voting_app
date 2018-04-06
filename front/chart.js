@@ -36,6 +36,11 @@ export default class Pie extends React.Component {
             var context = ReactDOM.findDOMNode(this).getContext('2d')
             this.drawChart(context)
     }
+    componentWillReceiveProps (nextProps) {
+        this.setState({
+            data:nextProps.data
+        })
+    }
     drawChart(context) {
         var labels = []
         var votes = []
@@ -49,7 +54,6 @@ export default class Pie extends React.Component {
 
          
         });
-        console.log(colors)
 
         var pie = new Chart(context,{
             type:'pie',
@@ -69,13 +73,27 @@ export default class Pie extends React.Component {
             },
             options: {
                 responsive: false,
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                animation: {
+                    duration:0
+                }
             }
         })
     }
+    shouldComponentUpdate (nextProps, nextState) {
+        console.log(nextProps)
+        console.log(this.state.data)
+        for (var i = 0; i < nextProps['data'].length; i++) {
+            if (nextProps['data'][i]['votes'] !=this.state.data[i]['votes']){
+                return true
+            }
+        }
+    return false
+    }
+    
     render() {
         return(
-                <canvas width="400" height = '400px' >
+                <canvas style={{display:'inline-block'}} >
                 </canvas>
         )
     }

@@ -1,10 +1,11 @@
 import mongoose from 'mongoose' 
 import Model from './model.js' 
+import dotenv from "dotenv"
 
 
-var url = 'mongodb://Lzrs:neowolf834@ds231529.mlab.com:31529/polls'
+dotenv.config()
+var url = 'mongodb://'+process.env.DB_USERNAME+':'+process.env.DB_PASSWORD+'@ds231529.mlab.com:31529/polls'
 var connection = mongoose.connect(url)
-
 
 function getPolls() {
     return Model.find({},(error,res)=>{

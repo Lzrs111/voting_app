@@ -1,0 +1,33 @@
+html,body {
+    height:100%;
+    width:100%;
+    margin: 0;
+}
+
+.main {
+    width:100%;
+}
+.poll {
+    height:100%;
+    width:20%;
+    display:inline-block;
+}
+.title {
+     height: 10%;
+     width:100%;
+     display:block;
+}
+
+.optionsDiv {
+     height:90%;
+     width: 100%;
+     border: solid 5px black;
+     display:block;
+}
+
+.pieDiv {
+    position:relative;
+    height: 100%;
+    width:80%;
+    display: inline-block;
+}
