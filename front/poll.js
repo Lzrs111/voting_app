@@ -7,9 +7,6 @@ export default class Poll extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            question:props.question,
-            votes:props.votes,
-            options:props.options,
             extended:false
             }
         this.update=true
@@ -17,19 +14,13 @@ export default class Poll extends React.Component {
         this.deleteThis = this.deleteThis.bind(this)
         this.extendSwitch = this.extendSwitch.bind(this);
     } 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            votes:nextProps.votes,
-            options:nextProps.options
-        })
-    }
     extendSwitch() {
         this.setState({
             extended:!this.state.extended
         })
     }
     renderOptions() {
-        return Object.values(this.state.options).map(( value,index)=>{
+        return Object.values(this.props.options).map(( value,index)=>{
             return (
                     <button  onClick ={()=>{
                         this.props.update([this.props._id,value.text,value._id])
@@ -45,7 +36,7 @@ export default class Poll extends React.Component {
     // only update this component if users have voted for it or if it's being extended
     shouldComponentUpdate(nextProps, nextState) {
         for (var i = 0; i < nextProps['options'].length; i++) {
-            if (nextProps['options'][i]['votes'] !=this.state.options[i]['votes']){
+            if (nextProps['options'][i]['votes'] !=this.props.options[i]['votes']){
                 return true
             }else if (nextState.extended !=this.state.extended){
                 return true
@@ -54,22 +45,21 @@ export default class Poll extends React.Component {
         return false
     }
     render() {
-        var data = ((100-(Object.keys(this.state.options)*20))/2).toString()
         return(
             <div className = 'main'>
                 <div className='poll' >
                     <div className='title' onClick={this.extendSwitch} >
-                        <h1 style={{margin:"0"}} >{this.state.question}</h1>
+                        <h1 style={{margin:"0"}} >{this.props.question}</h1>
                     </ div >
                     {this.state.extended ? 
-                    <div className='optionsDiv' style={{marginBottom:data,marginTop:data}} >
+                    <div className='optionsDiv' >
                         {this.renderOptions()}
                     </ div >
                     : null}
                 </ div >
                 {this.state.extended ?
                 <div  className = 'pieDiv'>
-                    <Pie data={this.state.options} />
+                    <Pie data={this.props.options} />
                 </div>
                 : null}
             </div>

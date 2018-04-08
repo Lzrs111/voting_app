@@ -7,9 +7,6 @@ import generateColor from './color.js'
 export default class Pie extends React.Component {
     constructor(props){
         super(props)
-        this.state = {
-            data:props.data
-            }
         this.drawChart = this.drawChart.bind(this);
         var presets = ['rgba(255, 99, 132',
             'rgba(54, 162, 235',
@@ -18,14 +15,12 @@ export default class Pie extends React.Component {
             'rgba(153, 102, 255',
             'rgba(255, 159, 64']
         this.colors = []
-        this.state.data.forEach(element=>{
+        this.props.data.forEach(element=>{
                 do {
                     var color = presets[Math.floor(Math.random()* (presets.length-1))]
                 } while (this.colors.includes(color));
                 this.colors.push(color)
             })
-
-
     }
     componentDidMount () {
         var context = ReactDOM.findDOMNode(this).getContext('2d')
@@ -35,11 +30,6 @@ export default class Pie extends React.Component {
     componentDidUpdate (prevProps, prevState) {
             var context = ReactDOM.findDOMNode(this).getContext('2d')
             this.drawChart(context)
-    }
-    componentWillReceiveProps (nextProps) {
-        this.setState({
-            data:nextProps.data
-        })
     }
     drawChart(context) {
         var labels = []
@@ -81,10 +71,8 @@ export default class Pie extends React.Component {
         })
     }
     shouldComponentUpdate (nextProps, nextState) {
-        console.log(nextProps)
-        console.log(this.state.data)
         for (var i = 0; i < nextProps['data'].length; i++) {
-            if (nextProps['data'][i]['votes'] !=this.state.data[i]['votes']){
+            if (nextProps['data'][i]['votes'] !=this.props.data[i]['votes']){
                 return true
             }
         }

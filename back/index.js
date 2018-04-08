@@ -10,7 +10,7 @@ ap.use('/',express.static(__dirname,{index:'index.html'})).listen(process.env.PO
 ap.get('/polls',(req,res)=>{
     getPolls().then((data)=>{
         console.log(' sending data to front-end')
-        res.send(data)
+        res.json(data)
         }).catch((error)=>{
             if (error) throw error
             })

@@ -8,7 +8,8 @@ export default class App extends React.Component {
         super()
         this.state = {
             polls: [],
-            adding:false
+            adding:false,
+            fetching: true
         }
      // bind methods
     this.renderPolls = this.renderPolls.bind(this)
