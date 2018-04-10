@@ -1,7 +1,7 @@
 import React from "react"
 import Pie from './chart.js' 
 import './styles.css'
-import { updatePoll, deletePoll, extendSwitch } from "../redux/actions.js";
+import { updatePoll, deletePoll} from "../redux/actions.js";
 import { connect } from "react-redux";
 
 
@@ -9,6 +9,9 @@ import { connect } from "react-redux";
 class Poll extends React.Component {
     constructor(props){
         super(props)
+        this.state = {
+            extended: false
+        };
         this.renderOptions = this.renderOptions.bind(this)
         this.deleteThis = this.deleteThis.bind(this)
         this.update = this.update.bind(this)
@@ -30,16 +33,21 @@ class Poll extends React.Component {
     deleteThis() {
         this.props.dispatch(deletePoll(this.props._id))
     }
+    extendSwitch() {
+        this.setState({
+            extended: !this.state.extended
+        })
+    }
     render() {
         return(
             <div className = 'main'>
                 <div className='poll' >
                     <div className='title' onClick={()=>{
-                        this.props.dispatch(extendSwitch())
+                        this.extendSwitch()
                         }}>
                         <h1 style={{margin:"0"}} >{this.props.question}</h1>
                     </ div >
-                    {this.props.extended ? 
+                    {this.state.extended ? 
                     <div className='optionsDiv' >
                         {this.renderOptions()}
                     </ div >
