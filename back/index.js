@@ -1,5 +1,5 @@
 import express from 'express' 
-import {getPolls,newPoll,deletePoll,updatePoll} from './crud.js' 
+import {getPolls,newPoll,deletePoll,updatePoll,updateIp} from './crud.js' 
 
 var ap = express()
 
@@ -9,7 +9,6 @@ ap.use('/',express.static(__dirname,{index:'index.html'})).listen(process.env.PO
 
 ap.get('/polls',(req,res)=>{
     getPolls().then((data)=>{
-        console.log(' sending data to front-end')
         res.json(data)
         }).catch((error)=>{
             if (error) throw error
@@ -19,8 +18,6 @@ ap.get('/polls',(req,res)=>{
 ap.post('/add',(req,res)=>{
     req.on('data',(data)=>{
         data = JSON.parse(data)
-        console.log(data,'parse')
-        console.log('received data')
         // insert new poll  into database, then retrieve polls from database and send to front-end
         newPoll(data).then(()=>{
             return getPolls()
@@ -49,16 +46,32 @@ ap.delete('/del',(req,res)=>{
 
 ap.post('/update',(req,res)=>{
     req.on('data',(data)=>{
-        updatePoll(data).then((data)=>{
-            return getPolls()
-            })
-            .then((data)=>{
-                res.json(data)
+        console.log("recieved data, validating")
+        
+        var prom = new Promise((resolve,reject)=>{
+            updatePoll(data).then(
+                (success)=>{
+                    resolve(getPolls())
+                },
+                (reason)=>{
+                    reject(reason)
+                })
+        
+        })
+        
+        prom.then(
+            (succ)=>{
+            res.send(succ)
+            },
+            (reason)=>{
+            console.log(reason,"lol")
+            res.send(JSON.stringify(reason))
             })
             .catch((error)=>{
                 if (error) throw error
             })
-        })
     })
+})
+
 
 

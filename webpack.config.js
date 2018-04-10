@@ -1,3 +1,6 @@
+var dotenv = require("dotenv").config()
+var webpack = require("webpack")
+
 module.exports = [{
     entry: __dirname + '/front/index.js',
     output: {
@@ -19,7 +22,12 @@ module.exports = [{
             ]
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            "process.env.API_KEY": JSON.stringify(process.env.API_KEY)
+        })
+    ]
 },{
     entry: __dirname + '/back/index.js',
     output: {

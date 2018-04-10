@@ -1,17 +1,16 @@
 import mongoose from 'mongoose' 
 import Model from './model.js' 
 import dotenv from "dotenv"
+import ipModel from "./ipmodel"
 
 
 dotenv.config()
-var url = 'mongodb://'+process.env.DB_USERNAME+':'+process.env.DB_PASSWORD+'@ds231529.mlab.com:31529/polls'
+var url = 'mongodb://'+process.env.DB_USERNAME+':'+process.env.DB_PASSWORD+'@ds046067.mlab.com:46067/polls2'
 var connection = mongoose.connect(url)
 
-function getPolls() {
+export function getPolls() {
     return Model.find({},(error,res)=>{
         if (error) throw error
-        console.log(' got data from database')
-        console.log(res)
         return Object.assign({},res)
         })
 }
@@ -21,11 +20,10 @@ function generateOptions(data) {
     var p  =  keys.map((value,index)=>{
         return {text: data[value],votes:0};           
     })
-    console.log('returningp')
    return p
 };
 
-function newPoll(data) {
+export function newPoll(data) {
     return new Promise((resolve)=>{
 
         const poll = new Model({
@@ -36,12 +34,11 @@ function newPoll(data) {
 
         poll.save((error) => {
             if (error) throw error
-            console.log('added poll to db')
             resolve()
         })
     })
 }
-function deletePoll(id) {
+export function deletePoll(id) {
     return new Promise((resolve,reject)=>{
         Model.deleteOne({_id:id},(error)=>{
             if (error) throw error
@@ -50,15 +47,56 @@ function deletePoll(id) {
         })
 }
 
-function updatePoll(data) {
+
+export function updatePoll(data) {
     data = JSON.parse(data)
     return new Promise((resolve,reject)=>{
-        Model.findOneAndUpdate({_id:data[0],"options._id":data['2']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
-            if (error) throw error
-            resolve()
+        updateIp(data)
+        .then(
+            (success)=>{
+                console.log("validated",success)
+                console.log(data)
+                Model.findOneAndUpdate({_id:data["id"],"options._id":data['votedFor']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
+                    if (error) throw error
+                    console.log("added user vote to db")
+                    resolve()
+                })
+            },
+            (reason)=>{
+                reject(reason)
+            }
+        ).catch((reason)=>{
+            console.log(reason)
             })
-        })
-    
+    })
 }
 
-module.exports ={getPolls,newPoll,deletePoll,updatePoll}
+function updateIp(data) {
+return new Promise((resolve,reject)=>{
+    ipModel.find({ip:data["ip"]},(error,res)=>{
+        if (error) throw error
+        console.log(res,"res")
+        if (res.length==0){
+            console.log("res len =0")
+            const ip = new ipModel({
+                ip: data["ip"],
+                polls: [data["id"]]
+            })
+            ip.save((err)=>{
+                console.log("new user added")
+                resolve("updated db")
+                })
+        } else if (res[0]["ip"]==data["ip"]) {
+            if (res[0]["polls"].includes(data["id"])){
+                console.log("already voted")
+                reject("already voted")
+            } else {
+                ipModel.update({ip:data["ip"]},{$push:{polls:data["id"]}},(err,raw)=>{
+                    console.log("updated db")
+                    resolve("updated db")
+                    }) 
+            }
+        } 
+    })
+})
+}

@@ -1,7 +1,9 @@
 import React from "react"
+import { connect } from "react-redux";
+import { newPoll } from "../redux/actions";
 
 
-export default class InputForm extends React.Component {
+class InputForm extends React.Component {
     constructor(props){
         super(props)
         this.state = {
@@ -29,14 +31,12 @@ export default class InputForm extends React.Component {
             }
         });
         if (check){
-            this.props.add(this.state)
+            this.props.dispatch(newPoll(this.state))
         }
 
     }
     change(event,index) {
-        console.log(event,index)
         var temporary = this.state.choices
-        console.log(temporary,'temporary')
         temporary[index] = event.target.value
         this.setState({
             choices:temporary
@@ -46,15 +46,12 @@ export default class InputForm extends React.Component {
         var temporary = event.target.value
         this.setState({
             question:temporary
-        },()=>{
-            console.log(this.state)
-            })
+        })
     }
     renderChoice() {
         var temporary = this.state.choices
         var t = []
         for (var i = 2; i < Object.keys(temporary).length; i++) {
-            console.log(Object.keys(temporary).length,'temporary.length')
             if (temporary.hasOwnProperty(i)){
                 t.push(
                     <label>
@@ -67,8 +64,6 @@ export default class InputForm extends React.Component {
                 )
             }
         }
-        console.log('t',t)
-        console.log('t.length',t.length)
         return t
     }
     addChoice() {
@@ -122,3 +117,9 @@ export default class InputForm extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {}
+}
+
+export default connect(mapStateToProps)(InputForm)
