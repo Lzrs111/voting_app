@@ -71,7 +71,9 @@ export function updatePoll(obj) {
         
         fetch(ip).then(res=>{
             return res.json()
-        })
+        },(reason)=>{
+            console.log("=)")
+            })
         .then((data)=>{
             data = Object.assign({},obj,{ip:data["ip"]})
             console.log("sending ",data," to db")
