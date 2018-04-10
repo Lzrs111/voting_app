@@ -15,6 +15,7 @@ class Poll extends React.Component {
         this.renderOptions = this.renderOptions.bind(this)
         this.deleteThis = this.deleteThis.bind(this)
         this.update = this.update.bind(this)
+        this.extendSwitch = this.extendSwitch.bind(this)
     } 
     renderOptions() {
         return Object.values(this.props.options).map(( value,index)=>{
@@ -53,7 +54,7 @@ class Poll extends React.Component {
                     </ div >
                     : null}
                 </ div >
-                {this.props.extended ?
+                {this.state.extended ?
                 <div  className = 'pieDiv'>
                     <Pie data={this.props.options} />
                 </div>
