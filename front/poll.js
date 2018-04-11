@@ -21,7 +21,7 @@ class Poll extends React.Component {
         return Object.values(this.props.options).map(( value,index)=>{
             return (
                     <button  onClick ={()=>{
-                        this.update({id:this.props._id,votedFor:value._id})
+                        this.update({id:this.props._id,votedFor:value._id,ip:this.props.ip})
                         }} style={{height:'20%',width:'100%',display:'block'}} >
                         {value.text}{value.votes}
                     </button>

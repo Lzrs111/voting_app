@@ -1,4 +1,5 @@
-import { dispatch,combineReducers } from "redux";
+import 'babel-polyfill'
+import {combineReducers } from "redux";
 export const GET_POLLS = 'GET_POLLS'
 
 export function getPolls(json) {
@@ -40,68 +41,91 @@ export function extendSwitch() {
     }
 }
 
+export const LOG_IP ='LOG_IP'
+
+export function logIp(ip) {
+    return{
+    type:LOG_IP,
+    ip:ip
+    }
+}
+
 export function fetchPolls() {
-    return (dispatch)=>{
+    return async (dispatch)=>{
         dispatch(requestData())
         var req = new Request("polls",{method:"GET"})
-        return fetch(req).then((res)=>{
-            return res.json()
-            })
-            .then((data)=>{
-                dispatch(getPolls(data))
-                })
+        try {
+            var data = await fetch(req)
+            data=await data.json()
+            dispatch(getPolls(data))
+        } catch (error){
+            if (error) throw error
         }
+    }
 }
 
 export function deletePoll(id) {
-    return (dispatch)=>{
+    return async (dispatch)=>{
         var req = new Request("del",{method:"DELETE",body:id})
-        fetch(req).then(res=>{
-            return res.json()
-        }).then((data)=>{
+        try {
+            var data = await fetch(req)
+            data=await data.json()
             dispatch(getPolls(data))
-            })
+        } catch (error){
+            if (error) throw error
         }
+    }
 }
 
 export function updatePoll(obj) {
-    return (dispatch)=>{
 
-        var ip = new Request("http://api.ipstack.com/check?access_key="+process.env.API_KEY,{method:"GET"})
-        
-        fetch(ip).then(res=>{
-            return res.json()
-        },(reason)=>{
-            console.log("=)")
-            })
-        .then((data)=>{
-            data = Object.assign({},obj,{ip:data["ip"]})
-            console.log("sending ",data," to db")
-            var req = new Request("update",{method:"POST",body:JSON.stringify(data)})
+    return async (dispatch)=>{
+       
+        var data = Object.assign({},obj)
+        console.log("sending ",data," to db")
+        var req = new Request("update",{method:"POST",body:JSON.stringify(data)})
 
-            fetch(req).then(
-                (success)=>{
-                    return success.json()
+        try {
+            var polls = await fetch(req)
+            polls=await polls.json()
+            
+            if (typeof(polls)=='string'){
+                alert(polls)
+            }else {
+                console.log(dispatch)
+                dispatch(getPolls(polls))
                 }
-                ).then((data)=>{
-                    if (typeof(data)=="string"){
-                        alert(data)
-                    } else {
-                        dispatch(getPolls(data))
-                    }
-                    })
-            })
+        } catch (error){
+            if (error) throw error
         }
+    }
 }
 
 export function newPoll(body) {
-    return (dispatch)=>{
+    return async (dispatch)=>{
         dispatch(addSwitch())
         var req = new Request("add",{method:"POST",body:JSON.stringify(body)})
-        fetch(req).then(res=>{
-            return res.json()
-        }).then((data)=>{
+        try {
+            var data = await fetch(req)
+            data=await data.json()
             dispatch(getPolls(data))
-            })
+        } catch (error){
+            if (error) throw error
         }
+        }
+}
+
+export function fetchIp() {
+
+    return async (dispatch)=>{
+        var ip = new Request("http://api.ipstack.com/check?access_key="+process.env.API_KEY,{method:"GET"})
+            
+        try {
+            var data=await fetch(ip)
+            data=await data.json()
+            dispatch(logIp(data['ip']))
+        } catch (error){
+            if (error) throw error
+        }
+    }        
 }

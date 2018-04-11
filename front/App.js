@@ -2,7 +2,7 @@ import React from "react"
 import Poll from './poll.js' 
 import InputForm from './input.js' 
 import './styles.css'
-import { getPolls, fetchPolls, addSwitch } from "../redux/actions.js";
+import { getPolls, fetchPolls, addSwitch,fetchIp } from "../redux/actions.js";
 import { connect } from "react-redux";
 
 class App extends React.Component {
@@ -13,6 +13,7 @@ class App extends React.Component {
     this.addSwitch = this.addSwitch.bind(this)
     }
     componentDidMount () {
+        this.props.dispatch(fetchIp())
         this.props.dispatch(fetchPolls())
     }
     addSwitch() {
@@ -22,7 +23,7 @@ class App extends React.Component {
         if (this.props.polls){
             return this.props.polls.map((value,index)=>{
                 return (
-                    <Poll question={value.question} votes={value.totalVotes} options={value.options} _id={ value._id} key={index} />
+                    <Poll question={value.question} votes={value.totalVotes} options={value.options} _id={ value._id} key={index}  ip={this.props.ip} />
                 )
                 })
         }
@@ -44,7 +45,8 @@ class App extends React.Component {
 function mapStateToProps(state) {
     return {
         polls:state.asyncRedux.polls,
-        adding: state.visualRedux.adding
+        adding: state.visualRedux.adding,
+        ip:state.asyncRedux.ip
     }
 }
 

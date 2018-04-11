@@ -47,31 +47,24 @@ export function deletePoll(id) {
         })
 }
 
-
-export function updatePoll(data) {
+// update a poll
+export async function updatePoll(data) {
     data = JSON.parse(data)
-    return new Promise((resolve,reject)=>{
-        updateIp(data)
-        .then(
-            (success)=>{
-                console.log("validated",success)
-                console.log(data)
-                Model.findOneAndUpdate({_id:data["id"],"options._id":data['votedFor']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
-                    if (error) throw error
-                    console.log("added user vote to db")
-                    resolve()
-                })
-            },
-            (reason)=>{
-                reject(reason)
-            }
-        ).catch((reason)=>{
-            console.log(reason)
-            })
-    })
+    try {
+        await checkIp(data)
+        Model.findOneAndUpdate({_id:data["id"],"options._id":data['votedFor']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
+            if (error) throw error
+            console.log("added user vote to db")
+        }) 
+        } catch (reason) {
+            console.log(reason,"catch")
+            return reason
+        }
 }
 
-function updateIp(data) {
+
+//this function checks if user has already voted on a particular poll
+function checkIp(data) {
 return new Promise((resolve,reject)=>{
     ipModel.find({ip:data["ip"]},(error,res)=>{
         if (error) throw error
