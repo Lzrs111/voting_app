@@ -38,6 +38,7 @@ ap.delete('/del',(req,res)=>{
 
 ap.post('/update',(req,res)=>{
     req.on('data',async (data)=>{
+        // try to update poll. If it works, fetch new data and send to front end
         try {
             var info = await updatePoll(data)
             if (info){

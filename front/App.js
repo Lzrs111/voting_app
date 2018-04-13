@@ -11,8 +11,10 @@ class App extends React.Component {
      // bind methods
     this.renderPolls = this.renderPolls.bind(this)
     this.addSwitch = this.addSwitch.bind(this)
+    this.generateStyle = this.generateStyle.bind(this);
     }
     componentDidMount () {
+        // when component mounts fetch user IP and polls. The ip is necessary later for vote checks
         this.props.dispatch(fetchIp())
         this.props.dispatch(fetchPolls())
     }
@@ -25,16 +27,36 @@ class App extends React.Component {
                 return (
                     <Poll question={value.question} votes={value.totalVotes} options={value.options} _id={ value._id} key={index}  ip={this.props.ip} />
                 )
-                })
+          })
         }
+    }
+    generateStyle() {
+        var style = {borderRadius:'50%',border:'none'}
+        if (this.props.adding){
+            style=Object.assign({},style,{backgroundColor:'darkred'})
+        }else {
+            style=Object.assign({},style,{backgroundColor:'lightgreen'})
+            }
+        return style
     }
     render() {
         return(
             <div style={{width:"100vw",height:'100vh'}} >
+                
                 {this.renderPolls()}
-                <button onClick={this.addSwitch}>
-                {this.props.adding ? "Cancel": "Add"}
+
+                 {/*button for adding polls and it's behavior. It varies depending on this.props.adding  */}
+                <button onClick={this.addSwitch} style={this.generateStyle()} >
+                {this.props.adding ? 
+                    <span style={{color:'red',fontSize:"200%"}} >
+                    -
+                    </span>
+                    : <span style={{color:'green',fontSize:'200%'}} >
+                        +                       
+                    </span > }
                 </button>
+
+                {/* if adding show Input Form for new polls */}
                 {this.props.adding ? <InputForm /> : null}
             </div>
         )

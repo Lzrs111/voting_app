@@ -23,20 +23,23 @@ export default class Pie extends React.Component {
             })
     }
     componentDidMount () {
+        var canvas = ReactDOM.findDOMNode(this)
         var context = ReactDOM.findDOMNode(this).getContext('2d')
-        this.drawChart(context)
+        this.drawChart(context,canvas)
   
     }
     componentDidUpdate (prevProps, prevState) {
-            var context = ReactDOM.findDOMNode(this).getContext('2d')
-            this.drawChart(context)
+        var canvas = ReactDOM.findDOMNode(this)
+        var context = ReactDOM.findDOMNode(this).getContext('2d')
+        this.drawChart(context,canvas)
     }
-    drawChart(context) {
+    drawChart(context,canvas) {
         var labels = []
         var votes = []
         var colors = this.colors
        
         var temporary = this.props.data
+        var w = 40/temporary.length-1
 
         temporary.forEach(element => {
             labels.push(element['text'])
@@ -44,6 +47,9 @@ export default class Pie extends React.Component {
 
          
         });
+
+        context.fillStyle = '#f5e9ff'
+        context.fillRect(0,0,canvas.width,canvas.height)
 
         var pie = new Chart(context,{
             type:'pie',
@@ -66,6 +72,12 @@ export default class Pie extends React.Component {
                 maintainAspectRatio: false,
                 animation: {
                     duration:0
+                },
+                legend:{
+                    position:'bottom',
+                    labels:{
+                        boxWidth: w
+                    }
                 }
             }
         })
@@ -81,7 +93,7 @@ export default class Pie extends React.Component {
     
     render() {
         return(
-                <canvas style={{display:'inline-block'}} >
+                <canvas style={{display:'block',margin:'auto'}} >
                 </canvas>
         )
     }

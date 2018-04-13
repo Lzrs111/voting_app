@@ -20,9 +20,9 @@ class Poll extends React.Component {
     renderOptions() {
         return Object.values(this.props.options).map(( value,index)=>{
             return (
-                    <button  onClick ={()=>{
+                    <button  className="optionsButton"  onClick ={()=>{
                         this.update({id:this.props._id,votedFor:value._id,ip:this.props.ip})
-                        }} style={{height:'20%',width:'100%',display:'block'}} >
+                        }} >
                         {value.text}{value.votes}
                     </button>
             )
@@ -46,7 +46,10 @@ class Poll extends React.Component {
                     <div className='title' onClick={()=>{
                         this.extendSwitch()
                         }}>
-                        <h1 style={{margin:"0"}} >{this.props.question}</h1>
+                        <h1>{this.props.question}</h1>
+                        <button onClick={this.deleteThis} className="deleteButton">
+                         X
+                        </button>
                     </ div >
                     {this.state.extended ? 
                     <div className='optionsDiv' >
@@ -59,9 +62,6 @@ class Poll extends React.Component {
                     <Pie data={this.props.options} />
                 </div>
                 : null}
-                <button onClick={this.deleteThis} >
-                Delete poll
-                </button>
             </div>
         )
     }
