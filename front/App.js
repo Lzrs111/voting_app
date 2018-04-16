@@ -43,21 +43,26 @@ class App extends React.Component {
         return(
             <div style={{width:"100vw",height:'100vh'}} >
                 
-                {this.renderPolls()}
+                {this.props.fetching ?  
+                <h1 >
+                    Fetching polls...
+                </h1>
+                :<div  style={{height:'100%',width:'100%'}}>
+                    {this.renderPolls()}
 
-                 {/*button for adding polls and it's behavior. It varies depending on this.props.adding  */}
-                <button onClick={this.addSwitch} style={this.generateStyle()} >
-                {this.props.adding ? 
-                    <span style={{color:'red',fontSize:"200%"}} >
-                    -
-                    </span>
-                    : <span style={{color:'green',fontSize:'200%'}} >
-                        +                       
-                    </span > }
-                </button>
-
-                {/* if adding show Input Form for new polls */}
-                {this.props.adding ? <InputForm /> : null}
+                     {/*button for adding polls and it's behavior. It varies depending on this.props.adding  */}
+                    <button onClick={this.addSwitch} style={this.generateStyle()} >
+                    {this.props.adding ? 
+                        <span style={{color:'red',fontSize:"200%"}} >
+                        -
+                        </span>
+                        : <span style={{color:'green',fontSize:'200%'}} >
+                            +                       
+                        </span > }
+                    </button>
+                </ div>}
+                    {/* if adding show Input Form for new polls */}
+                    {this.props.adding ? <InputForm /> : null}
             </div>
         )
     }
@@ -68,7 +73,8 @@ function mapStateToProps(state) {
     return {
         polls:state.asyncRedux.polls,
         adding: state.visualRedux.adding,
-        ip:state.asyncRedux.ip
+        ip:state.asyncRedux.ip,
+        fetching:state.fetching
     }
 }
 

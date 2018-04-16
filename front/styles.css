@@ -77,4 +77,41 @@ h1:hover {
     background-color: #ecc3ff
 }
 
+.inputDiv {
+    position:absolute;
+    top: 0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    z-index: 1;
+    height:100%;
+    width:100%;
+    background-color: rgba(128,128,128,0.3);
+}
 
+.inputForm {
+    margin-top:20%;
+    background-color: white;
+    display:block;
+    margin:auto;
+    width:30%;
+}
+input {
+    display:block;
+    margin:auto;
+}
+
+.choiceText {
+    display:block;
+    margin:auto;
+    text-align:center;
+}
+.choiceDiv {
+    margin-bottom:3%;
+}
+
+.choiceWrap {
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+}

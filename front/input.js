@@ -1,6 +1,6 @@
 import React from "react"
 import { connect } from "react-redux";
-import { newPoll } from "../redux/actions";
+import { newPoll, addSwitch } from "../redux/actions";
 
 
 class InputForm extends React.Component {
@@ -55,18 +55,23 @@ class InputForm extends React.Component {
             if (temporary.hasOwnProperty(i)){
                 t.push(
                     <label>
-                    Choice {i+1} 
-                    <input type='text' placeholder='Enter choice' onChange={()=>{
-                        this.change(event,i-1)
-                        }} >
-                    </input>
-                </label>
+                        <div className='choiceDiv' >
+                            <span  className='choiceText' >
+                                Choice {i+1}
+                            </span>
+                            <input type='text' placeholder='Enter choice' onChange={()=>{
+                                this.change(event,i-1)
+                                }} >
+                            </input>
+                        </ div >
+                    </label>
                 )
             }
         }
         return t
     }
     addChoice() {
+        console.log('addingJoyce')
         var temporary = this.state.choices
         if (Object.keys(temporary).length <4){
             temporary[Object.keys(temporary).length] = ''
@@ -77,49 +82,73 @@ class InputForm extends React.Component {
     }
     render() {
         return(
-            <div>
-                <form onSubmit={this.submit} >
-                    <label>
-                            Question
-                            <input type='text' placeholder='Enter question' onChange={()=>{
-                                this.questionChange(event)
-                                }} ref={(input)=>{
-                                    this.question = input
-                                    }} >
-                            </input>
-                        </label>
-                        <label>
-                            Choice 1
-                            <input type='text' placeholder='Enter choice' onChange={()=>{
-                                this.change(event,0)
-                                }} ref={(input)=>{
-                                this.c1 = input
-                                }} >
-                            </input>
-                        </label>
-                        <label>
-                            Choice 2
-                            <input type='text' placeholder='Enter choice' onChange={()=>{
-                                this.change(event,1)
-                                }}ref={(input)=>{
-                                this.c2 = input
-                                }} >
-                            </input>
-                        </label>
-                        {this.renderChoice()}
-                <input type = 'submit' value = 'submit' >
-                </input>
-                </form>
+            <div className='inputDiv'>
+                <div className='inputForm' >
+                    <form onSubmit={this.submit} >
+                        <div  className='choiceWrap' >
+                            <label>
+                                <div className='choiceDiv' >
+                                <span  className='choiceText' >
+                                    Question
+                                </span>
+                                <input type='text' placeholder='Enter question' onChange={()=>{
+                                    this.questionChange(event)
+                                    }} ref={(input)=>{
+                                        this.question = input
+                                            }} >
+                                    </input>
+                                    </ div >
+                                </label>
+                                <label>
+                                    <div className='choiceDiv' >
+                                        <span  className='choiceText' >
+                                            Choice1
+                                        </span>
+                                        <input type='text' placeholder='Enter choice' onChange={()=>{
+                                            this.change(event,0)
+                                            }} ref={(input)=>{
+                                            this.c1 = input
+                                            }} >
+                                        </input>
+                                    </ div >
+                                </label>
+                                <label>
+                                    <div className='choiceDiv' >
+                                        <span  className='choiceText'>
+                                            Choice 2
+                                        </span>
+                                        <input type='text' placeholder='Enter choice' onChange={()=>{
+                                            this.change(event,1)
+                                            }}ref={(input)=>{
+                                            this.c2 = input
+                                            }} >
+                                        </input>
+                                    </ div >
+                                </label>
+                                {this.renderChoice()}
+                        <input type = 'submit' value = 'submit' >
+                        </input>
+                        </ div >
+                    </form>
+                <div className='addCancelDiv' >
                 <button  onClick={this.addChoice} >
-                    Add choice
+                    Add
                 </button>
+                <button  onClick={()=>{
+                    this.props.dispatch(addSwitch())
+                    }} >
+                    Cancel
+                </button>
+                </ div >
+            </ div >
         </div>
         )
     }
 }
 
 function mapStateToProps(state) {
-    return {}
+    return {
+    }
 }
 
 export default connect(mapStateToProps)(InputForm)

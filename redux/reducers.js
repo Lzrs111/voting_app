@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import { getPolls,requestData,updatePoll,deletePoll,addPoll,addSwitch,extendSwitch, GET_POLLS, REQUEST_DATA, EXTEND_SWITCH, ADD_SWITCH, LOG_IP} from "./actions";
 
-function asyncRedux(state ={polls: []},action) {
+function asyncRedux(state ={polls: [],fetching:true},action) {
     switch (action.type) {
         case GET_POLLS:
             return Object.assign({},state,{polls:action.polls,fetching:false})
