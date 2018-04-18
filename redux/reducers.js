@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { getPolls,requestData,updatePoll,deletePoll,addPoll,addSwitch,extendSwitch, GET_POLLS, REQUEST_DATA, EXTEND_SWITCH, ADD_SWITCH, LOG_IP} from "./actions";
+import { getPolls,requestData,updatePoll,deletePoll,addPoll,addSwitch, GET_POLLS, REQUEST_DATA,  ADD_SWITCH, LOG_IP} from "./actions";
 
 function asyncRedux(state ={polls: [],fetching:true},action) {
     switch (action.type) {
@@ -18,15 +18,13 @@ function asyncRedux(state ={polls: [],fetching:true},action) {
     }
 }
 
-function visualRedux(state ={extended:false,adding:false},action) {
+function visualRedux(state,action) {
     switch (action.type) {
-        case EXTEND_SWITCH:
-            return Object.assign({},state,{extended:!state.extended})
-            break;
         case ADD_SWITCH:
+            console.log(state.adding,!state.adding)
             return Object.assign({},state,{adding:!state.adding})
         default:
-            return state
+        return {adding:false}
             break;
     }
     

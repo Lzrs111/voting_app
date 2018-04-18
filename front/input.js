@@ -102,7 +102,7 @@ class InputForm extends React.Component {
                                 <label>
                                     <div className='choiceDiv' >
                                         <span  className='choiceText' >
-                                            Choice1
+                                            Choice 1
                                         </span>
                                         <input type='text' placeholder='Enter choice' onChange={()=>{
                                             this.change(event,0)

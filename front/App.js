@@ -11,14 +11,15 @@ class App extends React.Component {
      // bind methods
     this.renderPolls = this.renderPolls.bind(this)
     this.addSwitch = this.addSwitch.bind(this)
-    this.generateStyle = this.generateStyle.bind(this);
     }
     componentDidMount () {
         // when component mounts fetch user IP and polls. The ip is necessary later for vote checks
         this.props.dispatch(fetchIp())
         this.props.dispatch(fetchPolls())
+        console.log(this.props.fetching)
     }
     addSwitch() {
+        console.log('add switch')
        this.props.dispatch(addSwitch()) 
     }
     renderPolls() {
@@ -29,15 +30,6 @@ class App extends React.Component {
                 )
           })
         }
-    }
-    generateStyle() {
-        var style = {borderRadius:'50%',border:'none'}
-        if (this.props.adding){
-            style=Object.assign({},style,{backgroundColor:'darkred'})
-        }else {
-            style=Object.assign({},style,{backgroundColor:'lightgreen'})
-            }
-        return style
     }
     render() {
         return(
@@ -50,15 +42,10 @@ class App extends React.Component {
                 :<div  style={{height:'100%',width:'100%'}}>
                     {this.renderPolls()}
 
-                     {/*button for adding polls and it's behavior. It varies depending on this.props.adding  */}
-                    <button onClick={this.addSwitch} style={this.generateStyle()} >
-                    {this.props.adding ? 
-                        <span style={{color:'red',fontSize:"200%"}} >
-                        -
-                        </span>
-                        : <span style={{color:'green',fontSize:'200%'}} >
-                            +                       
-                        </span > }
+                    <button onClick={()=>{
+                        this.addSwitch()
+                        }}  className='addButton' >
+                        Add poll
                     </button>
                 </ div>}
                     {/* if adding show Input Form for new polls */}
@@ -74,7 +61,7 @@ function mapStateToProps(state) {
         polls:state.asyncRedux.polls,
         adding: state.visualRedux.adding,
         ip:state.asyncRedux.ip,
-        fetching:state.fetching
+        fetching:state.asyncRedux.fetching
     }
 }
 

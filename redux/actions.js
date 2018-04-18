@@ -33,14 +33,6 @@ export function addSwitch() {
     }
 }
 
-export const EXTEND_SWITCH ='EXTEND_SWITCH'
-
-export function extendSwitch() {
-    return{
-    type:EXTEND_SWITCH
-    }
-}
-
 export const LOG_IP ='LOG_IP'
 
 export function logIp(ip) {
@@ -49,6 +41,7 @@ export function logIp(ip) {
     ip:ip
     }
 }
+
 
 export function fetchPolls() {
     return async (dispatch)=>{
@@ -92,7 +85,6 @@ export function updatePoll(obj) {
             if (typeof(polls)=='string'){
                 alert(polls)
             }else {
-                console.log(dispatch)
                 dispatch(getPolls(polls))
                 }
         } catch (error){

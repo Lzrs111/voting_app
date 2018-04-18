@@ -54,10 +54,8 @@ export async function updatePoll(data) {
         await checkIp(data)
         Model.findOneAndUpdate({_id:data["id"],"options._id":data['votedFor']},{$inc: {totalVotes:1,"options.$.votes":1}},(error,document)=>{
             if (error) throw error
-            console.log("added user vote to db")
         }) 
         } catch (reason) {
-            console.log(reason,"catch")
             return reason
         }
 }
@@ -70,22 +68,18 @@ return new Promise((resolve,reject)=>{
         if (error) throw error
         console.log(res,"res")
         if (res.length==0){
-            console.log("res len =0")
             const ip = new ipModel({
                 ip: data["ip"],
                 polls: [data["id"]]
             })
             ip.save((err)=>{
-                console.log("new user added")
                 resolve("updated db")
                 })
         } else if (res[0]["ip"]==data["ip"]) {
             if (res[0]["polls"].includes(data["id"])){
-                console.log("already voted")
-                reject("already voted")
+                reject("You have already voted")
             } else {
                 ipModel.update({ip:data["ip"]},{$push:{polls:data["id"]}},(err,raw)=>{
-                    console.log("updated db")
                     resolve("updated db")
                     }) 
             }

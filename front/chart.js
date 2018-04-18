@@ -1,7 +1,6 @@
 import Chart from 'chart.js';
 import React from "react"
 import ReactDOM from 'react-dom' 
-import generateColor from './color.js' 
 
 
 export default class Pie extends React.Component {
@@ -20,7 +19,8 @@ export default class Pie extends React.Component {
                     var color = presets[Math.floor(Math.random()* (presets.length-1))]
                 } while (this.colors.includes(color));
                 this.colors.push(color)
-            })
+           })
+        
     }
     componentDidMount () {
         var canvas = ReactDOM.findDOMNode(this)
@@ -44,15 +44,13 @@ export default class Pie extends React.Component {
         temporary.forEach(element => {
             labels.push(element['text'])
             votes.push(element['votes'])
-
-         
         });
 
         context.fillStyle = '#f5e9ff'
         context.fillRect(0,0,canvas.width,canvas.height)
 
         var pie = new Chart(context,{
-            type:'pie',
+            type:this.props.type,
             data:{
                 labels:labels,
                 datasets:[{
@@ -86,6 +84,8 @@ export default class Pie extends React.Component {
         for (var i = 0; i < nextProps['data'].length; i++) {
             if (nextProps['data'][i]['votes'] !=this.props.data[i]['votes']){
                 return true
+            }else if (nextProps.type !=this.props.type){
+                return true                
             }
         }
     return false
@@ -93,7 +93,7 @@ export default class Pie extends React.Component {
     
     render() {
         return(
-                <canvas style={{display:'block',margin:'auto'}} >
+            <canvas style={{display:'block',margin:'auto'}} >
                 </canvas>
         )
     }
