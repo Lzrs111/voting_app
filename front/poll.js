@@ -53,9 +53,11 @@ class Poll extends React.Component {
                 <div className='poll' >
                     <div className='title'>
                         <h1 onClick={this.extendSwitch}>{this.props.question}</h1>
-                        <button onClick={this.deleteThis} className="deleteButton">
-                         X
-                        </button>
+                        <div style={{width:"10%"}}>
+                            <button onClick={this.deleteThis} style={{display:"block",margin:"auto"}}>
+                             X
+                            </button>
+                        </div>
                     </ div >
                     {this.state.extended ? 
                         <div className='optionsDiv' >

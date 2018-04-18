@@ -17,7 +17,6 @@ html,body {
 }
 .title {
     margin:0;
-    height:20%;
     width:100%;
     display:flex;
     flex-direction: row;
@@ -126,8 +125,20 @@ button:focus {
     outline:none;
 }
 
+canvas {
+    width: 450px;
+    height: 225px;
+}
+
 
 @media screen and (max-width:480px) {
+    .main {
+        margin-top: "0"
+    }
+
+    .poll {
+        width: 100%;
+    }
 
 }
 
