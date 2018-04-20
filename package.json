@@ -13,6 +13,7 @@
   "dependencies": {
     "babel-plugin-transform-regenerator": "^6.26.0",
     "babel-polyfill": "^6.26.0",
+    "bcryptjs": "^2.4.3",
     "bootstrap": "^4.1.0",
     "chart.js": "^2.7.2",
     "css-loader": "^0.28.11",

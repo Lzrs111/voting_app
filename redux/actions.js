@@ -42,6 +42,33 @@ export function logIp(ip) {
     }
 }
 
+export const USER_STATUS ='USER_STATUS'
+
+export function userStatus(status,username) {
+    return{
+    type:USER_STATUS,
+    userStatus: status,
+    username:username 
+    }
+}
+
+export const USER_POLLS ='USER_POLLS'
+
+export function userPolls(polls) {
+    return{
+    type:USER_POLLS,
+    userPolls: polls
+    }
+}
+
+export const LOGIN_SWITCH ='LOGIN_SWITCH'
+
+export function loginSwitch() {
+    return{
+    type:LOGIN_SWITCH
+    }
+}
+
 
 export function fetchPolls() {
     return async (dispatch)=>{
@@ -120,4 +147,58 @@ export function fetchIp() {
             if (error) throw error
         }
     }        
+}
+
+export function registerUser(body) {
+    return async (dispatch) => {
+        var req = new Request("register",{method:"POST",body:JSON.stringify(body)})
+
+        try {
+            var res = await fetch(req)
+            console.log(res)
+            res = await res.json()
+            console.log(res,"registered")
+            dispatch(userStatus(res,""))
+        } catch (error) {
+            if (error) throw error
+        }
+    }
+}
+
+export function loginUser(body) {
+    return async(dispatch)=>{
+        var req = new Request("login",{method:"POST",body:JSON.stringify(body)})
+
+        try {
+            var res = await fetch(req)
+            console.log(res)
+            var data = await res.json()
+            if (res.status == 200){
+                console.log("Ok")
+                 dispatch(userStatus("logged in",body.username))
+                 dispatch(loginSwitch())
+                 dispatch(userPolls(data.userPolls))
+            } else {
+                console.log(data)
+                dispatch(userStatus(data,""))
+            }
+        } catch (error) {
+            console.log(error,error)
+        }
+
+        }
+}
+
+export function logOut(username) {
+    return async (dispatch)=>{
+        var req = new Request("logout",{method:"DELETE",body:JSON.stringify(username)})
+
+        try {
+           await fetch(req)
+           dispatch(userStatus("Welcome! Please log in or register",""))
+           dispatch(loginSwitch())
+        } catch (error) {
+            if (error) throw error
+        }
+        }
 }

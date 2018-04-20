@@ -18,12 +18,15 @@ class Poll extends React.Component {
         this.update = this.update.bind(this)
         this.extendSwitch = this.extendSwitch.bind(this)
         this.changeChart = this.changeChart.bind(this);
+        this.mainStyle = this.mainStyle.bind(this)
     } 
     renderOptions() {
         return Object.values(this.props.options).map(( value,index)=>{
             return (
                     <button  className="optionsButton"  onClick ={()=>{
-                        this.update({id:this.props._id,votedFor:value._id,ip:this.props.ip})
+                        
+                            this.update({id:this.props._id,votedFor:value._id,ip:this.props.ip,loggedIn:this.props.loggedIn,username:this.props.username})
+
                         }} >
                         {value.text}  {value.votes}
                     </button>
@@ -46,10 +49,25 @@ class Poll extends React.Component {
             type:type
         })
     }
+    mainStyle() {
+        var mainStyle = {}
+        if (this.state.extended){
+           if (window.innerWidth<=480){
+               mainStyle={height:"40%"}
+           } else if (window.innerWidth <=800 && window.innerWidth > 480) {
+               mainStyle = {height:"50%"}
+           } else {
+               mainStyle = {height:"60%"}
+           }
+        } else {
+            mainStyle = {height:"auto"}
+        }
+        return mainStyle
+        
+    }
     render() {
-        var mainStyle = this.state.extended ? {height:"60%"} :{height:"auto"}
         return(
-            <div className = 'main'  style={mainStyle}>
+            <div className = 'main' style={this.mainStyle()}>
                 <div className='poll' >
                     <div className='title'>
                         <h1 onClick={this.extendSwitch}>{this.props.question}</h1>
@@ -93,6 +111,8 @@ class Poll extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        loggedIn: state.userReducer.loggedIn,
+        username: state.userReducer.username
     }
 }
 

@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { getPolls,requestData,updatePoll,deletePoll,addPoll,addSwitch, GET_POLLS, REQUEST_DATA,  ADD_SWITCH, LOG_IP} from "./actions";
+import { getPolls,requestData,updatePoll,deletePoll,addPoll,addSwitch, GET_POLLS, REQUEST_DATA,  ADD_SWITCH, LOG_IP, USER_STATUS,LOGIN_SWITCH, USER_POLLS} from "./actions";
 
 function asyncRedux(state ={polls: [],fetching:true},action) {
     switch (action.type) {
@@ -30,8 +30,24 @@ function visualRedux(state,action) {
     
 }
 
+function userReducer(state,action) {
+    switch (action.type) {
+        case USER_STATUS:
+            return Object.assign({},state,{userStatus:action.userStatus,username: action.username})
+            break;
+        case LOGIN_SWITCH:
+            return Object.assign({},state,{loggedIn:!state.loggedIn})
+        case USER_POLLS:
+            return Object.assign({},state,{userPolls:action.userPolls})
+            break;
+        default:
+            return {userStatus:"Welcome! Please register or log in",username:"",loggedIn: false,userPolls:[]}
+            break;
+    }
+}
 
-const mainReducer = combineReducers({asyncRedux,visualRedux})
+
+const mainReducer = combineReducers({asyncRedux,visualRedux,userReducer})
 
 export default mainReducer
 

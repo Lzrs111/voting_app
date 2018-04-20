@@ -133,16 +133,52 @@ canvas {
 
 @media screen and (max-width:480px) {
     .main {
-        margin-top: "0"
+        margin-top: 0;
     }
 
     .poll {
         width: 100%;
     }
 
+    .inputForm {
+        width:  100%;
+    }
+
+}
+
+/* header stuff  */
+
+.headerDiv {
+    display: flex;
+    width: 100%;
+    justify-content: center
+}
+
+.loginDiv {
+    display: flex;
+    width:30%;
+    justify-content: space-evenly;
+}
+
+.headerInputsDiv {
+    display: flex;
+    width:70%;
+    justify-content: flex-end;
 }
 
 
-@media screen and (min-width:480) and (max-width:800) {
- 
+
+
+@media screen and (min-width:480px) and (max-width:800px) {
+    .main {
+        margin-top: 0;
+    }
+
+    .poll {
+        width: 100%;
+    }
+
+    .inputForm {
+        width:  100%;
+    }
 }

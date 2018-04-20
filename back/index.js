@@ -1,6 +1,6 @@
 import 'babel-polyfill'
 import express from 'express' 
-import {getPolls,newPoll,deletePoll,updatePoll,updateIp} from './crud.js' 
+import {getPolls,newPoll,deletePoll,updatePoll,updateIp,registerUser,loginUser,logoutUser} from './crud.js' 
 
 var ap = express()
 
@@ -48,8 +48,49 @@ ap.post('/update',(req,res)=>{
                 }
         } catch (error){
             if (error) throw error
-            console.log( error)
         }  
     })
 })
+
+ap.post("/register",(req,res)=>{
+    req.on("data",async (data)=>{
+        try {
+            var info = await registerUser(data)
+            res.send(JSON.stringify(info))
+        } catch (error) {
+           if (error) throw error 
+        }
+        })
+    })
         
+ap.post("/login",(req,res)=>{
+    req.on("data",async(data)=>{
+        try {
+           var info =  await loginUser(data)
+           console.log(info)
+           res.send(JSON.stringify(info))
+        } catch (reason) {
+            switch (reason) {
+                case "User does not exist":
+                    res.writeHead(404,reason)
+                    break;
+                case "Wrong password":
+                case "User already logged in":
+                    res.writeHead(403,reason)
+                    break;
+            }
+            res.end(JSON.stringify(reason))
+        } 
+    })
+})
+
+ap.delete("/logout",(req,res)=>{
+    req.on("data",async (data)=>{
+        try {
+           await logoutUser(data) 
+           res.end()
+        } catch (error) {
+            if (error) throw error
+        }
+        })
+    })

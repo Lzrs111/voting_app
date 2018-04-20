@@ -1,8 +1,9 @@
 import React from "react"
+import Header from "./header.js"
 import Poll from './poll.js' 
 import InputForm from './input.js' 
 import './styles.css'
-import { getPolls, fetchPolls, addSwitch,fetchIp } from "../redux/actions.js";
+import { getPolls, fetchPolls, addSwitch,fetchIp, logOut } from "../redux/actions.js";
 import { connect } from "react-redux";
 
 class App extends React.Component {
@@ -16,10 +17,9 @@ class App extends React.Component {
         // when component mounts fetch user IP and polls. The ip is necessary later for vote checks
         this.props.dispatch(fetchIp())
         this.props.dispatch(fetchPolls())
-        console.log(this.props.fetching)
+
     }
     addSwitch() {
-        console.log('add switch')
        this.props.dispatch(addSwitch()) 
     }
     renderPolls() {
@@ -34,7 +34,7 @@ class App extends React.Component {
     render() {
         return(
             <div style={{width:"100vw",height:'100vh'}} >
-                
+                <Header />
                 {this.props.fetching ?  
                 <h1 >
                     Fetching polls...
@@ -61,7 +61,8 @@ function mapStateToProps(state) {
         polls:state.asyncRedux.polls,
         adding: state.visualRedux.adding,
         ip:state.asyncRedux.ip,
-        fetching:state.asyncRedux.fetching
+        fetching:state.asyncRedux.fetching,
+        username: state.userReducer.username
     }
 }
 
