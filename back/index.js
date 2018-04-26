@@ -1,17 +1,20 @@
 import 'babel-polyfill'
 import express from 'express' 
-import {getPolls,newPoll,deletePoll,updatePoll,updateIp,registerUser,loginUser,logoutUser} from './crud.js' 
+import {getPolls,newPoll,deletePoll,updatePoll,updateIp,registerUser,loginUser,logoutUser,fetchUserPolls} from './crud.js' 
 
 var ap = express()
 
+//basic route
 ap.use('/',express.static(__dirname,{index:'index.html'})).listen(process.env.PORT || 3000,()=>{
     console.log('server started')
     })
 
+//fetch all polls
 ap.get('/polls',async (req,res)=>{
     res.send(await getPolls())
     })
 
+//POST route to add a new poll, also fetches polls at the end
 ap.post('/add',(req,res)=>{
     req.on('data',async (data)=>{
         data = JSON.parse(data)
@@ -24,9 +27,9 @@ ap.post('/add',(req,res)=>{
     })
 })
 
+//DELETE route to delete a poll and send new updated polls to frontend
 ap.delete('/del',(req,res)=>{
     req.on('data',async(data)=>{
-        // delete poll from DB, retrieve polls from db and send to front-end
         try {
             await deletePoll(data)
             res.send(await getPolls())
@@ -36,22 +39,22 @@ ap.delete('/del',(req,res)=>{
     })
 })
 
+//update a particular poll
 ap.post('/update',(req,res)=>{
     req.on('data',async (data)=>{
         // try to update poll. If it works, fetch new data and send to front end
         try {
-            var info = await updatePoll(data)
-            if (info){
-                res.send(JSON.stringify(info))
-            }else {
-                res.send(await getPolls())
-                }
-        } catch (error){
-            if (error) throw error
+            await updatePoll(data)
+            res.send(await getPolls())
+        } catch (reason){
+            console.log("reason",reason)
+            res.writeHead(401,reason)
+            res.end(JSON.stringify(reason))
         }  
     })
 })
 
+//register new user
 ap.post("/register",(req,res)=>{
     req.on("data",async (data)=>{
         try {
@@ -62,7 +65,8 @@ ap.post("/register",(req,res)=>{
         }
         })
     })
-        
+     
+//log in user
 ap.post("/login",(req,res)=>{
     req.on("data",async(data)=>{
         try {
@@ -84,6 +88,7 @@ ap.post("/login",(req,res)=>{
     })
 })
 
+//log out user
 ap.delete("/logout",(req,res)=>{
     req.on("data",async (data)=>{
         try {
@@ -94,3 +99,15 @@ ap.delete("/logout",(req,res)=>{
         }
         })
     })
+
+//fetch poll
+ap.post("/userpolls",(req,res)=>{
+    req.on("data",async(data)=>{
+        try {
+           var polls = await fetchUserPolls(data)            
+           res.send(JSON.stringify(polls))
+        } catch (error) {
+            if (error) throw error
+        }
+        })
+})

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from "react-redux";
-import { registerUser,loginUser, logOut } from '../redux/actions';
+import { registerUser,loginUser, logOut,autoLogin } from '../redux/actions';
 
 class Header extends Component {
     constructor(props) {
@@ -9,9 +9,18 @@ class Header extends Component {
         this.submit = this.submit.bind(this)
     }
     componentDidMount() {
-        window.addEventListener("beforeunload",()=>{
-            this.props.dispatch(logOut(this.props.username))
-            return null
+       window.addEventListener("beforeunload",()=>{
+            this.props.dispatch(logOut(this.props.username)).then(()=>{
+                return "string" 
+                })
+            return "string" 
+            })
+
+        window.addEventListener("unload",()=>{
+            this.props.dispatch(logOut(this.props.username)).then(()=>{
+                return "string" 
+                })
+            return "string" 
             })
     }
     
@@ -30,7 +39,8 @@ class Header extends Component {
             if (type=="register"){
                 this.props.dispatch(registerUser({username:this.userName.value,password: this.passWord.value}))
             } else if(type=="login") {
-                this.props.dispatch(loginUser({username:this.userName.value,password:this.passWord.value}))
+                let body = {username:this.userName.value,password:this.passWord.value} 
+                this.props.dispatch(loginUser(body))
             } 
         } else {
             alert("Please fill in all forms =)")
@@ -44,7 +54,7 @@ class Header extends Component {
                         {this.checkStatus()}
                     </h1>
                 </div>
-                {this.props.userStatus == "logged in" ?
+                {this.props.loggedIn ?
                 <div className ="loginDiv" >
                     <p >
                         Welcome {this.props.username}
@@ -83,7 +93,8 @@ class Header extends Component {
 function mapStateToProps(state) {
    return {
        userStatus: state.userReducer.userStatus,
-       username: state.userReducer.username
+       username: state.userReducer.username,
+       loggedIn: state.userReducer.loggedIn
    } 
 }
 

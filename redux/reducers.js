@@ -30,7 +30,7 @@ function visualRedux(state,action) {
     
 }
 
-function userReducer(state,action) {
+function userReducer(state={userStatus:"Welcome! Please register or log in",username:"",loggedIn: false,userPolls:[]},action) {
     switch (action.type) {
         case USER_STATUS:
             return Object.assign({},state,{userStatus:action.userStatus,username: action.username})
@@ -41,7 +41,7 @@ function userReducer(state,action) {
             return Object.assign({},state,{userPolls:action.userPolls})
             break;
         default:
-            return {userStatus:"Welcome! Please register or log in",username:"",loggedIn: false,userPolls:[]}
+            return state
             break;
     }
 }

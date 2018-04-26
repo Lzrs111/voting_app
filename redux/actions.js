@@ -84,9 +84,9 @@ export function fetchPolls() {
     }
 }
 
-export function deletePoll(id) {
+export function deletePoll(body) {
     return async (dispatch)=>{
-        var req = new Request("del",{method:"DELETE",body:id})
+        var req = new Request("del",{method:"DELETE",body:JSON.stringify(body)})
         try {
             var data = await fetch(req)
             data=await data.json()
@@ -102,18 +102,19 @@ export function updatePoll(obj) {
     return async (dispatch)=>{
        
         var data = Object.assign({},obj)
-        console.log("sending ",data," to db")
         var req = new Request("update",{method:"POST",body:JSON.stringify(data)})
 
         try {
-            var polls = await fetch(req)
-            polls=await polls.json()
+            var res = await fetch(req)
+            console.log(res,"res")
+            data=await res.json()
+            console.log(data,data)
             
-            if (typeof(polls)=='string'){
-                alert(polls)
-            }else {
-                dispatch(getPolls(polls))
-                }
+            if (res.status == 200){
+                dispatch(getPolls(data))
+            } else {
+                alert(data)
+            }
         } catch (error){
             if (error) throw error
         }
@@ -128,6 +129,8 @@ export function newPoll(body) {
             var data = await fetch(req)
             data=await data.json()
             dispatch(getPolls(data))
+            console.log(body.username)
+            dispatch(fetchUserPolls(body.username))
         } catch (error){
             if (error) throw error
         }
@@ -187,6 +190,20 @@ export function loginUser(body) {
         }
 
         }
+}
+
+export function fetchUserPolls(username) {
+    return async(dispatch)=>{
+        try {
+            var req = new Request("userpolls",{method:"POST",body:username})
+            var polls = await fetch(req)
+            polls = await polls.json()
+            dispatch(userPolls(polls.userPolls))
+        }
+        catch (error) {
+            if (error) throw error
+        }
+    }
 }
 
 export function logOut(username) {

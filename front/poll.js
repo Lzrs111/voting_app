@@ -37,7 +37,7 @@ class Poll extends React.Component {
         this.props.dispatch(updatePoll(obj))
     }
     deleteThis() {
-        this.props.dispatch(deletePoll(this.props._id))
+        this.props.dispatch(deletePoll({id:this.props._id,username:this.props.username}))
     }
     extendSwitch() {
         this.setState({
@@ -71,11 +71,13 @@ class Poll extends React.Component {
                 <div className='poll' >
                     <div className='title'>
                         <h1 onClick={this.extendSwitch}>{this.props.question}</h1>
+                        {this.props.loggedIn && (this.props.userPolls.includes(this.props._id)) ? 
                         <div style={{width:"10%"}}>
                             <button onClick={this.deleteThis} style={{display:"block",margin:"auto"}}>
                              X
                             </button>
                         </div>
+                        :null}
                     </ div >
                     {this.state.extended ? 
                         <div className='optionsDiv' >
@@ -112,7 +114,8 @@ class Poll extends React.Component {
 function mapStateToProps(state) {
     return {
         loggedIn: state.userReducer.loggedIn,
-        username: state.userReducer.username
+        username: state.userReducer.username,
+        userPolls: state.userReducer.userPolls
     }
 }
 

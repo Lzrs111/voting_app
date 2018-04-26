@@ -31,7 +31,7 @@ class InputForm extends React.Component {
             }
         });
         if (check){
-            this.props.dispatch(newPoll(this.state))
+            this.props.dispatch(newPoll(Object.assign({},this.state,{loggedIn:this.props.loggedIn,username:this.props.username})))
         }
 
     }
@@ -148,6 +148,8 @@ class InputForm extends React.Component {
 
 function mapStateToProps(state) {
     return {
+        loggedIn: state.userReducer.loggedIn,
+        username: state.userReducer.username
     }
 }
 

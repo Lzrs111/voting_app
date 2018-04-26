@@ -12,15 +12,33 @@ class App extends React.Component {
      // bind methods
     this.renderPolls = this.renderPolls.bind(this)
     this.addSwitch = this.addSwitch.bind(this)
+    this.logOutTimer = this.logOutTimer.bind(this)
+
+    this.timer;
     }
     componentDidMount () {
         // when component mounts fetch user IP and polls. The ip is necessary later for vote checks
         this.props.dispatch(fetchIp())
         this.props.dispatch(fetchPolls())
 
+        //logout timer
+        document.addEventListener("click",this.logOutTimer)
     }
     addSwitch() {
        this.props.dispatch(addSwitch()) 
+    }
+    logOutTimer() {
+
+        if (typeof(this.timer)!="undefined"){
+            console.log("clearing timer")
+            clearTimeout(this.timer)
+        }
+
+        this.timer = setTimeout(()=> {
+            console.log("logging out")
+            this.props.dispatch(logOut(this.props.username))
+            },10000)
+        
     }
     renderPolls() {
         if (this.props.polls){
@@ -47,6 +65,10 @@ class App extends React.Component {
                         }}  className='addButton' >
                         Add poll
                     </button>
+                    <button onClick={()=>{
+                        alert(document.cookie)
+                        }} >
+                    </button>
                 </ div>}
                     {/* if adding show Input Form for new polls */}
                     {this.props.adding ? <InputForm /> : null}
@@ -62,7 +84,8 @@ function mapStateToProps(state) {
         adding: state.visualRedux.adding,
         ip:state.asyncRedux.ip,
         fetching:state.asyncRedux.fetching,
-        username: state.userReducer.username
+        username: state.userReducer.username,
+        loggedIn: state.userReducer.loggedIn
     }
 }
 

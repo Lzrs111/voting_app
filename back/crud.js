@@ -30,25 +30,36 @@ function generateOptions(data) {
 export function newPoll(data) {
     return new Promise((resolve)=>{
 
-        const poll = new Model({
-            question: data['question'],
-            options: generateOptions(data['choices']),
-            totalVotes: 0
-        });
+        var poll = {question:data["question"],options:generateOptions(data["choices"]),totalVotes:0}
+        var options = { upsert: true, new: true, setDefaultsOnInsert: true };
 
-        poll.save((error) => {
+        Model.findOneAndUpdate({question:data.question},poll,options,(error,result)=>{
             if (error) throw error
-            resolve()
+            if (data.loggedIn){
+                UserModel.update({username:data.username},{$push:{created:result["_id"]}},(error)=>{
+                    if (error) throw error
+                    resolve()
+                    })
+            } else {
+                resolve()
+            }
         })
     })
 }
-export function deletePoll(id) {
+export function deletePoll(data) {
+    data = JSON.parse(data)
+    console.log(data,"data")
     return new Promise((resolve,reject)=>{
-        Model.deleteOne({_id:id},(error)=>{
+        Model.deleteOne({_id:data.id},(error)=>{
             if (error) throw error
-            resolve()
-            })
+            UserModel.findOneAndUpdate({username:data["username"]},{$pull:{created:data["id"]}},(error,doc,res)=>{
+                if (error) throw error 
+                console.log(doc)
+                console.log(typeof(doc.created))
+                resolve()
+                })
         })
+    })
 }
 
 // update a poll
@@ -65,7 +76,7 @@ export async function updatePoll(data) {
             if (error) throw error
         }) 
         } catch (reason) {
-            return reason
+            return Promise.reject(reason)
         }
 }
 
@@ -101,6 +112,7 @@ function checkIfVoted(data) {
         UserModel.find({username:data.username},(error,res)=>{
             if (error) throw error
             if (res[0]["votedOn"].includes(data["id"])){
+                console.log("already voted here hehe")
                 reject("You have already voted on this poll")
             } else {
                 UserModel.update({username:data["username"]},{$push:{votedOn:data["id"]}},(error,raw)=>{
@@ -204,4 +216,10 @@ export async function logoutUser(data) {
         if (error) throw error
         
     }
+}
+
+export async function fetchUserPolls(username) {
+    let polls = await UserModel.find({username:username})
+    console.log("fetched polls",polls)
+    return {userPolls: polls[0]["created"]}
 }
