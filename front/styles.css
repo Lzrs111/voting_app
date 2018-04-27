@@ -5,8 +5,8 @@ html,body {
 }
 
 .main {
-    margin-top:1.5%;
     width:100%;
+    margin-top: 1.5%;
 }
 
 .poll {
@@ -22,10 +22,11 @@ html,body {
     flex-direction: row;
     align-items: center;
     background-color:#ede4ff;  
+    height: 10%;
 }
 
 .optionsDiv {
-    height:80%;
+    height:90%;
     width:30%;
     float:left;
     background-color: #f5e9ff;
@@ -56,9 +57,14 @@ html,body {
 }
 
 h1 {
-    width:90%;
     margin:0;
     text-align: center;
+}
+
+p {
+    width: 10%;
+    text-align: center;
+    margin: 0;
 }
 
 .optionsButton {
@@ -68,7 +74,7 @@ h1 {
 }
 
 
-h1:hover {
+.title:hover {
     background-color: #ecc3ff
 }
 
@@ -131,20 +137,7 @@ canvas {
 }
 
 
-@media screen and (max-width:480px) {
-    .main {
-        margin-top: 0;
-    }
 
-    .poll {
-        width: 100%;
-    }
-
-    .inputForm {
-        width:  100%;
-    }
-
-}
 
 /* header stuff  */
 
@@ -158,6 +151,7 @@ canvas {
     display: flex;
     width:30%;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 .headerInputsDiv {
@@ -166,7 +160,42 @@ canvas {
     justify-content: flex-end;
 }
 
+.headerInput {
+    height: 60%;
+    width: 25%;
+}
 
+.headerHeading {
+    height: auto;
+    width: auto;
+}
+
+@media screen and (max-width:480px) {
+    .main {
+        margin-top: 0;
+    }
+
+    .poll {
+        width: 100%;
+    }
+
+    .inputForm {
+        width:  100%;
+    }
+
+    .headerInputsDiv {
+        width: 40%;
+    }
+
+    .headerHeading {
+        font-size: 100%;
+    }
+
+    .loginDiv {
+        width:60%;
+    }
+
+}
 
 
 @media screen and (min-width:480px) and (max-width:800px) {

@@ -50,7 +50,7 @@ class Header extends Component {
         return (
             <div className="headerDiv">
                 <div className ="headerInputsDiv" >
-                    <h1 >
+                    <h1 className="headerHeading">
                         {this.checkStatus()}
                     </h1>
                 </div>
@@ -67,18 +67,18 @@ class Header extends Component {
                 </div>
                     :
                 <div className="loginDiv" >
-                    <input placeholder="username" style={{margin:0}} ref={(input)=>{
+                    <input placeholder="username" className='headerInput' style={{margin:0}} ref={(input)=>{
                         this.userName = input
                         }}/>
-                    <input placeholder="password" type="password" style={{margin:0}} ref={(input)=>{
+                    <input placeholder="password" className='headerInput' type="password" style={{margin:0}} ref={(input)=>{
                         this.passWord = input
                         }}/>
-                        <button onClick={(event)=>{
+                        <button className='headerInput'  onClick={(event)=>{
                             this.submit(event,"login")
                             }} >
                             Login
                         </button>
-                        <button onClick={(event)=>{
+                        <button className='headerInput' onClick={(event)=>{
                             this.submit(event,"register")
                             }}>
                             Register

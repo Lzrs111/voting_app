@@ -30,13 +30,13 @@ class App extends React.Component {
     logOutTimer() {
 
         if (typeof(this.timer)!="undefined"){
-            console.log("clearing timer")
             clearTimeout(this.timer)
         }
 
         this.timer = setTimeout(()=> {
-            console.log("logging out")
-            this.props.dispatch(logOut(this.props.username))
+            if (this.props.loggedIn) {
+                this.props.dispatch(logOut(this.props.username))
+            }
             },10000)
         
     }
@@ -54,7 +54,7 @@ class App extends React.Component {
             <div style={{width:"100vw",height:'100vh'}} >
                 <Header />
                 {this.props.fetching ?  
-                <h1 >
+                <h1 style={{marginLeft:"auto",marginTop:"1.5%",marginRight:"auto"}} >
                     Fetching polls...
                 </h1>
                 :<div  style={{height:'100%',width:'100%'}}>
@@ -64,10 +64,6 @@ class App extends React.Component {
                         this.addSwitch()
                         }}  className='addButton' >
                         Add poll
-                    </button>
-                    <button onClick={()=>{
-                        alert(document.cookie)
-                        }} >
                     </button>
                 </ div>}
                     {/* if adding show Input Form for new polls */}

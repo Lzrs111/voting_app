@@ -70,7 +70,10 @@ class Poll extends React.Component {
             <div className = 'main' style={this.mainStyle()}>
                 <div className='poll' >
                     <div className='title'>
-                        <h1 onClick={this.extendSwitch}>{this.props.question}</h1>
+                        <p onClick={this.extendSwitch} >
+                            {this.state.extended ? "-" : "+"}
+                        </p>
+                        <h1 style={{width:"80%"}} onClick={this.extendSwitch}>{this.props.question}</h1>
                         {this.props.loggedIn && (this.props.userPolls.includes(this.props._id)) ? 
                         <div style={{width:"10%"}}>
                             <button onClick={this.deleteThis} style={{display:"block",margin:"auto"}}>
@@ -87,7 +90,7 @@ class Poll extends React.Component {
                         </ div >
                 : null}
                 {this.state.extended?
-                <div  style={{height:"80%",width:"70%",display:'inline-block'}} >
+                <div  style={{height:"90%",width:"70%",display:'inline-block'}} >
                         <div  className = 'pieDiv'>
                             <Pie data={this.props.options} type={this.state.type}/>
                         </div>

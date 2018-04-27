@@ -212,7 +212,7 @@ export function logOut(username) {
 
         try {
            await fetch(req)
-           dispatch(userStatus("Welcome! Please log in or register",""))
+           dispatch(userStatus("Welcome! Please register or log in",""))
            dispatch(loginSwitch())
         } catch (error) {
             if (error) throw error
