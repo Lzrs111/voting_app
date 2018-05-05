@@ -60,11 +60,13 @@ class App extends React.Component {
                 :<div  style={{height:'100%',width:'100%'}}>
                     {this.renderPolls()}
 
-                    <button onClick={()=>{
-                        this.addSwitch()
-                        }}  className='addButton' >
-                        Add poll
+                    <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginTop: "1.5%"}} >
+                        <button onClick={()=>{
+                            this.addSwitch()
+                            }}  className='addButton' >
+                            Add poll
                     </button>
+                    </ div >
                 </ div>}
                     {/* if adding show Input Form for new polls */}
                     {this.props.adding ? <InputForm /> : null}

@@ -90,7 +90,7 @@ class Poll extends React.Component {
                         </ div >
                 : null}
                 {this.state.extended?
-                <div  style={{height:"90%",width:"70%",display:'inline-block'}} >
+                <div className="pieWrapper" >
                         <div  className = 'pieDiv'>
                             <Pie data={this.props.options} type={this.state.type}/>
                         </div>

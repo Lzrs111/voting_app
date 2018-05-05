@@ -18,6 +18,7 @@ class InputForm extends React.Component {
         this.change = this.change.bind(this);
         this.questionChange = this.questionChange.bind(this);
         this.addChoice = this.addChoice.bind(this)
+        this.labelStyle = this.labelStyle.bind(this)
     }
     submit(event) {
         event.preventDefault()
@@ -54,7 +55,7 @@ class InputForm extends React.Component {
         for (var i = 2; i < Object.keys(temporary).length; i++) {
             if (temporary.hasOwnProperty(i)){
                 t.push(
-                    <label>
+                    <label style={this.labelStyle()}>
                         <div className='choiceDiv' >
                             <span  className='choiceText' >
                                 Choice {i+1}
@@ -71,7 +72,6 @@ class InputForm extends React.Component {
         return t
     }
     addChoice() {
-        console.log('addingJoyce')
         var temporary = this.state.choices
         if (Object.keys(temporary).length <4){
             temporary[Object.keys(temporary).length] = ''
@@ -80,13 +80,35 @@ class InputForm extends React.Component {
             })
         }
     }
+    labelStyle() {
+        var temporary = Object.keys(this.state.choices).length
+        console.log(window.innerWidth)
+        if (window.innerWidth >480){
+            return {}
+        } else {
+            var style = {}
+            switch (temporary) {
+                case 2:
+                    style = {height: "33.3%"}
+                    break;
+                case 3:
+                    style = {height: "25%"}
+                break;
+                case 4:
+                    style =  {height: "20%"}
+                    break;
+            }
+            return style
+        }
+    }
     render() {
+        // hardcoded number of choices to 2 
         return(
             <div className='inputDiv'>
-                <div className='inputForm' >
-                    <form onSubmit={this.submit} >
+                <div className='inputBox' >
+                    <form onSubmit={this.submit} className="inputForm">
                         <div  className='choiceWrap' >
-                            <label>
+                            <label style={this.labelStyle()}>
                                 <div className='choiceDiv' >
                                 <span  className='choiceText' >
                                     Question
@@ -99,7 +121,7 @@ class InputForm extends React.Component {
                                     </input>
                                     </ div >
                                 </label>
-                                <label>
+                                <label style={this.labelStyle()}>
                                     <div className='choiceDiv' >
                                         <span  className='choiceText' >
                                             Choice 1
@@ -112,7 +134,7 @@ class InputForm extends React.Component {
                                         </input>
                                     </ div >
                                 </label>
-                                <label>
+                                <label style={this.labelStyle()}>
                                     <div className='choiceDiv' >
                                         <span  className='choiceText'>
                                             Choice 2
@@ -126,13 +148,15 @@ class InputForm extends React.Component {
                                     </ div >
                                 </label>
                                 {this.renderChoice()}
-                        <input type = 'submit' value = 'submit' >
-                        </input>
+                        </ div >
+                        <div className="submitButtonDiv">
+                            <input type = 'submit' value = 'submit' className="submitButton" >
+                            </input>
                         </ div >
                     </form>
-                <div className='addCancelDiv' >
+                <div className="addCancelDiv">
                 <button  onClick={this.addChoice} >
-                    Add
+                    Add choice
                 </button>
                 <button  onClick={()=>{
                     this.props.dispatch(addSwitch())
